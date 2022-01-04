@@ -1,6 +1,6 @@
 package bgu.spl.net.srv;
 
-import bgu.spl.net.srv.CommandMessage.NOTIFICATION;
+import bgu.spl.net.srv.CommandMessage.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,9 +17,22 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
         if (nextByte == ';'){
             short op=bytesToShort(opcode);
             switch (op){
-                case 1://REGISTER Messages
-
-
+                case 1:
+                    return new REGISTER(op,bytes);
+                case 2:
+                    return new LOGIN(op,bytes);
+                case 3:
+                    return new LOGOUT(op);
+                case 4:
+                    return new FOLLOW(op,bytes);
+                case 5:
+                    return new POST(op,bytes);
+                case 6:
+                    return new PM(op,bytes);
+                case 7:
+                    return new LOGSTAT(op);
+                case 8:
+                    return new STAT(op,bytes);
             }
             return msg;
         }

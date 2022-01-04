@@ -2,6 +2,8 @@ package bgu.spl.net.srv.CommandMessage;
 
 import bgu.spl.net.srv.Message;
 
+import java.util.List;
+
 public class PM extends Message {
     private String UserName;
     private String Content;
@@ -12,6 +14,22 @@ public class PM extends Message {
         UserName=userName;
         Content=content;
         DateAndTime=dateAndTime;
+    }
+
+    public PM(short op,List<Byte> bytes) {
+        super(op);
+        int i=0;
+        while (bytes.get(i)!=0){
+            UserName=UserName+bytes.get(i);
+        }
+        i++;
+        while (bytes.get(i)!=0){
+            Content=Content+bytes.get(i);
+        }
+        i++;
+        while (bytes.get(i)!=0){
+            DateAndTime=DateAndTime+bytes.get(i);
+        }
     }
 
     public void setUserName(String userName) {UserName = userName; }

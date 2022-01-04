@@ -2,6 +2,8 @@ package bgu.spl.net.srv.CommandMessage;
 
 import bgu.spl.net.srv.Message;
 
+import java.util.List;
+
 public class LOGIN extends Message {
     private String Username;
     private String Password;
@@ -13,6 +15,21 @@ public class LOGIN extends Message {
         Password=password;
         Captcha=captcha;
     }
+
+    public LOGIN(short op,List<Byte> bytes) {
+        super(op);
+        int i=0;
+        while (bytes.get(i)!=0){
+            Username=Username+bytes.get(i);
+        }
+        i++;
+        while (bytes.get(i)!=0){
+            Password=Password+bytes.get(i);
+        }
+        i++;
+        Captcha=bytes.get(i);
+    }
+
 
     public void setUsername(String username) {Username = username; }
 
