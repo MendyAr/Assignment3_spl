@@ -8,8 +8,6 @@ import java.util.List;
 public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDecoder<Message> {
     byte[] opcode;
     List<Byte> bytes=new LinkedList<>();
-    int len=0;
-    Message msg;
     int lenOpcode;
 
     @Override
@@ -34,7 +32,6 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
                 case 8:
                     return new STAT(op,bytes);
             }
-            return msg;
         }
         else {
             if (lenOpcode<2){
@@ -48,9 +45,8 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
 
     @Override
     public byte[] encode(Message message) {
-        byte[] opcode = shortToBytes(message.getOpcode());
         byte[] msg ;
-        msg=(message.getMessage()+ "\0").getBytes();
+        msg=(message.getMessage()+ ";").getBytes();
         return msg;
     }
 
@@ -61,11 +57,5 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
         return result;
     }
 
-    public static byte[] shortToBytes(short num)
-    {
-        byte[] bytesArr = new byte[2];
-        bytesArr[0] = (byte)((num >> 8) & 0xFF);
-        bytesArr[1] = (byte)(num & 0xFF);
-        return bytesArr;
-    }
+
 }
