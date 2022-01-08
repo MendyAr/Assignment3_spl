@@ -45,6 +45,13 @@ public class REGISTER extends Message {
 
     public void setBirthday(String birthday) { Birthday = birthday; }
 
+    public String getBirthday() { return Birthday; }
+
+    public String getPassword() { return Password; }
+
+    public String getUsername() { return Username; }
+
+
     @Override
     public String toString() {
         return "REGISTER " + Username + ' ' + Password + ' ' +Birthday;
