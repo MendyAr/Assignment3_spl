@@ -1,6 +1,7 @@
 package bgu.spl.net.srv.CommandMessage;
 
 import bgu.spl.net.srv.Message;
+import bgu.spl.net.srv.User;
 
 import java.util.List;
 
@@ -28,4 +29,8 @@ public class FOLLOW extends Message {
     public String toString() {
         return "FOLLOW " +Follow +" "+UserName;
     }
+
+    public String getUserName() {return UserName; }
+
+    public byte getFollow() { return Follow; }
 }

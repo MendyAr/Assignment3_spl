@@ -7,7 +7,8 @@ import java.util.List;
 public class PM extends Message {
     private String UserName;
     private String Content;
-    private String DateAndTime;
+    private String DateAndTime;//need to add the Date to the content in the end of the string
+
 
     public PM(short opcode,String userName,String content,String dateAndTime){
         super(opcode);
@@ -37,6 +38,10 @@ public class PM extends Message {
     public void setContent(String content) {Content = content;}
 
     public void setDateAndTime(String dateAndTime) {DateAndTime = dateAndTime; }
+
+    public String getUserName() { return UserName; }
+
+    public String getContent() { return Content; }
 
     @Override
     public String toString() {

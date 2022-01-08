@@ -36,6 +36,11 @@ public class LOGIN extends Message {
     public void setPassword(String password) {Password = password; }
 
     public void setCaptcha(byte captcha) {Captcha = captcha; }
+    public String getUsername() { return Username; }
+
+    public String getPassword() { return Password; }
+
+    public byte getCaptcha() { return Captcha; }
 
     @Override
     public String toString() {

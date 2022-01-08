@@ -1,5 +1,7 @@
 package bgu.spl.net.srv;
 
+import java.util.List;
+
 public class Message {
     private short opcode;
 
