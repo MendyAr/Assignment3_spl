@@ -14,21 +14,20 @@ public class User {
     private byte captcha;
     private Queue<String>  followList; //The users the user is following
     private Queue<String> followers; //The user’s followers
-    private int age;
+    private short age;
     private String birthday;
-    private int counterPosted;
+    private short counterPosted;
     private boolean isLogged;
     private List<NOTIFICATION>unSentNotification;
     private List<String> Blocked;//the users the current user is blocked
     private int connectionId; //need to initialize connectionId
-
     public User(REGISTER message, int HandlerConnectionId) {
         userName=message.getUsername();
         password=message.getPassword();
         birthday=message.getBirthday();
         isLogged=false;
         int birthYear=Integer.valueOf(birthday.substring(6));//need to check if the slicing is good->DD-MM-YYYY
-        age= Year.now().getValue()-birthYear;
+        age= (short)(Year.now().getValue()-birthYear);
         captcha=1;
         followers=new ConcurrentLinkedQueue<String>();
         followList=new ConcurrentLinkedQueue<String>();
@@ -41,6 +40,12 @@ public class User {
 
     public String getUserName() {return userName; }
     public int getConnectionId(){return connectionId;}
+    public Queue<String> getFollowers() { return followers; }
+
+    public short getAge() { return age; }
+
+    public short getCounterPosted() { return counterPosted; }
+
 
     public String getPassword() {return password; }
     public Queue<String> getFollowList() { return followList; }

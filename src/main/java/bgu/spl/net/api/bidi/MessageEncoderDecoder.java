@@ -74,7 +74,8 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
 
                     case 7:
                         byte[] content1 = (ack.getContent()).getBytes();
-                        msg = concatBitsArrays(shortToBytes(opcode), shortToBytes(opcodeMsg), content1);
+                        msg = concatBitsArrays(shortToBytes(opcode), shortToBytes(opcodeMsg), shortToBytes(ack.getAge()),
+                                shortToBytes(ack.getNumPosts()),shortToBytes(ack.getNumFollower()),shortToBytes(ack.getNumFollowing()));
                         break;
 
                     default:

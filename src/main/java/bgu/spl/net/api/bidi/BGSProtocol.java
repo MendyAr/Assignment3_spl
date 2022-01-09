@@ -126,7 +126,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                         if (!database.isUserRegistered(user.getUserName()))
                             connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 7));
                         if (!u.isBlocking(user) && !user.isBlocking(u))
-                            connections.send(HandlerConnectionId, new ACK((short) 10, (short) 7, user.Status()));
+                            connections.send(HandlerConnectionId, new ACK((short) 10, (short) 7, user.getAge(),user.getCounterPosted(),(short) user.getFollowers().size(),(short) user.getFollowList().size()));
                     }
                 }
                 break;
@@ -141,7 +141,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                         if (u.isBlocking(user) || user.isBlocking(u) || !database.isUserRegistered(username))
                             connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 8));
                         else
-                            connections.send(HandlerConnectionId, new ACK((short) 10, (short) 8, user.Status()));
+                            connections.send(HandlerConnectionId, new ACK((short) 10, (short) 8, user.getAge(),user.getCounterPosted(),(short) user.getFollowers().size(),(short) user.getFollowList().size()));
                     }
                 }
                 break;
