@@ -1,14 +1,13 @@
 #include "connectionHandler.h"
 
 using boost::asio::ip::tcp;
-
 using std::cin;
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::string;
 
-ConnectionHandler::ConnectionHandler(string host, short port): host_(host), port_(port), io_service_(), socket_(io_service_), delimiter(';'){}
+ConnectionHandler::ConnectionHandler(string host, short port): host_(host), port_(port), io_service_(), socket_(io_service_), toTerminate(false){}
 
 ConnectionHandler::~ConnectionHandler() {
     close();
@@ -63,15 +62,7 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
     return true;
 }
 
-bool ConnectionHandler::getLine(std::string& line) {
-    return getFrameAscii(line);
-}
-
-bool ConnectionHandler::sendLine(std::string& line) {
-    return sendFrameAscii(line);
-}
-
-bool ConnectionHandler::getFrameAscii(std::string& frame) {
+bool ConnectionHandler::getFrameAscii(std::string& frame, char delimiter) {
     char ch;
     // Stop when we encounter the null character. 
     // Notice that the null character is not appended to the frame string.
@@ -87,7 +78,7 @@ bool ConnectionHandler::getFrameAscii(std::string& frame) {
     return true;
 }
 
-bool ConnectionHandler::sendFrameAscii(const std::string& frame) {
+bool ConnectionHandler::sendFrameAscii(const std::string& frame, char delimiter) {
     bool result = sendBytes(frame.c_str(), frame.length());
     if(!result) return false;
     return sendBytes(&delimiter,1);
@@ -100,4 +91,12 @@ void ConnectionHandler::close() {
     } catch (...) {
         std::cout << "closing failed: connection already closed" << std::endl;
     }
+}
+
+bool ConnectionHandler::ToTerminate() {
+    return toTerminate;
+}
+
+void ConnectionHandler::Terminate() {
+    toTerminate = true;
 }
