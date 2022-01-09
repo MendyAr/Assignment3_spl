@@ -6,7 +6,7 @@ import java.util.List;
 
 public class FOLLOW extends Message {
     private byte Follow;//0 when a user wants to follow, otherwise it has a value of 1(Unfollow).
-    private String UserName;
+    private String UserName="";
     public FOLLOW(short opcode,byte follow,String userName){
         super(opcode);
         UserName=userName;

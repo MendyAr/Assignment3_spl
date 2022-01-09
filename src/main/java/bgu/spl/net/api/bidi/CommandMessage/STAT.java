@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class STAT extends Message {
-    private String ListOfUserName;
+    private String ListOfUserName="";
     public STAT(short opcode,String listOfUserName){
         super(opcode);
         ListOfUserName=listOfUserName;

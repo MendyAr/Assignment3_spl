@@ -5,8 +5,8 @@ import bgu.spl.net.api.bidi.Message;
 import java.util.List;
 
 public class LOGIN extends Message {
-    private String Username;
-    private String Password;
+    private String Username="";
+    private String Password="";
     private byte Captcha;
 
     public LOGIN(short opcode,String username,String password,byte captcha){
@@ -26,6 +26,7 @@ public class LOGIN extends Message {
         i++;
         while (bytes.get(i)!=0){
             Password=Password+bytes.get(i);
+            i++;
         }
         i++;
         Captcha=bytes.get(i);

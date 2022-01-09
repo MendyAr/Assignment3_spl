@@ -23,6 +23,8 @@ public class ACK extends Message {
   public ACK(short opcode, short MessageOpcode){
       super(opcode);
       this.MessageOpcode=MessageOpcode;
+      userName="";
+      Content="";
   }
   //constructor for follow ack
     public ACK(short opcode, short messageOpcode,short FollowOpcode,String userName){
@@ -30,12 +32,14 @@ public class ACK extends Message {
         MessageOpcode=messageOpcode;
         Follow=FollowOpcode;
         this.userName=userName;
+        Content="";
     }
     //constructor for LogStat ack
     public ACK(short opcode, short messageOpcode,String content){
         super(opcode);
         MessageOpcode=messageOpcode;
         Content=content;
+        userName="";
     }
   public void setMessageOpcode(short MessageOpcode){
       this.MessageOpcode=MessageOpcode;

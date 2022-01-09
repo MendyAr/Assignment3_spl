@@ -5,9 +5,9 @@ import bgu.spl.net.api.bidi.Message;
 import java.util.List;
 
 public class PM extends Message {
-    private String UserName;
-    private String Content;
-    private String DateAndTime;//need to add the Date to the content in the end of the string
+    private String UserName="";
+    private String Content="";
+    private String DateAndTime="";//need to add the Date to the content in the end of the string
 
 
     public PM(short opcode,String userName,String content,String dateAndTime){
@@ -22,14 +22,17 @@ public class PM extends Message {
         int i=0;
         while (bytes.get(i)!=0){
             UserName=UserName+bytes.get(i);
+            i++;
         }
         i++;
         while (bytes.get(i)!=0){
             Content=Content+bytes.get(i);
+            i++;
         }
         i++;
         while (bytes.get(i)!=0){
             DateAndTime=DateAndTime+bytes.get(i);
+            i++;
         }
     }
 

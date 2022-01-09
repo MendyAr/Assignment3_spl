@@ -4,8 +4,8 @@ import bgu.spl.net.api.bidi.Message;
 
 public class NOTIFICATION extends Message {
     private byte NotificationType;
-    private String PostingUser;
-    private String Content;
+    private String PostingUser="";
+    private String Content="";
 
     public NOTIFICATION(short Opcode,byte NotificationType, String PostingUser, String Content){
         super(Opcode);

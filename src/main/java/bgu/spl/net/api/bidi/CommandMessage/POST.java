@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class POST extends Message {
-    private String Content;
+    private String Content="";
     public POST(short opcode,String content){
         super(opcode);
         Content=content;
