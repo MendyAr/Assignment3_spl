@@ -14,9 +14,11 @@ public class STAT extends Message {
 
     public STAT(short op,List<Byte> bytes) {
         super(op);
-        for (int i = 0; i < bytes.size() - 1; i++){
+        int i=0;
+        while (bytes.get(i)!=0) {
             char c = (char) bytes.get(i).shortValue();
             ListOfUserName = ListOfUserName + c;
+            i++;
         }
     }
 
