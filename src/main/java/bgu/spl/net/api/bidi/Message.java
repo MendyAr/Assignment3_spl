@@ -24,8 +24,11 @@ public class Message {
     public String toString() {
         return "Message " + opcode;
     }
+
     public String getMessage(){
         return String.valueOf(opcode);
     }
+
+
 
 }

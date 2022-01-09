@@ -17,6 +17,6 @@ public class BLOCK extends Message {
     @Override
     public String toString() { return "BLOCK " +username; }
     public String getMessage(){
-        return super.getOpcode()+username+ "\0";
+        return username+ "\0";
     }
 }

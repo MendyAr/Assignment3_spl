@@ -27,12 +27,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                     connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 1));
                 }
                 else {
-                    try {
-                        u = new User((REGISTER) message, HandlerConnectionId);
-                    } catch (Exception e) {
-                        connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 1));//incorrect form of birthday
-                        break;
-                    }
+                    u = new User((REGISTER) message, HandlerConnectionId);
                     database.RegisterUser(u);
                     connections.send(HandlerConnectionId, new ACK((short) 10, (short) 1));
                 }

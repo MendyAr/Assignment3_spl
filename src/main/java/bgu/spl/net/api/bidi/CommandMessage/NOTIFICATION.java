@@ -36,7 +36,7 @@ public class NOTIFICATION extends Message {
                 notiType + PostingUser + " " + Content;
     }
     public String getMessage(){
-        return super.getOpcode()+NotificationType+PostingUser+ "\0"+
+        return NotificationType+PostingUser+ "\0"+
                 Content;
     }
 }

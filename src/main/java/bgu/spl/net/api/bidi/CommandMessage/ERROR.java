@@ -4,6 +4,11 @@ import bgu.spl.net.api.bidi.Message;
 
 public class ERROR extends Message {
     private short MessageOpcode;
+
+    public String getContent() {
+        return Content;
+    }
+
     private String Content;
     public ERROR(short opcode,short messageOpcode){
         super(opcode);
@@ -27,6 +32,6 @@ public class ERROR extends Message {
                 MessageOpcode;
     }
     public String getMessage(){
-        return super.getOpcode()+String.valueOf(MessageOpcode);
+        return String.valueOf(MessageOpcode);
     }
 }

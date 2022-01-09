@@ -3,6 +3,18 @@ package bgu.spl.net.api.bidi.CommandMessage;
 import bgu.spl.net.api.bidi.Message;
 
 public class ACK extends Message {
+    public short getFollow() {
+        return Follow;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getContent() {
+        return Content;
+    }
+
     private short MessageOpcode;
     private short Follow;
     private String userName;
@@ -43,6 +55,6 @@ public class ACK extends Message {
 
     }
     public String getMessage(){
-      return super.getOpcode()+String.valueOf(MessageOpcode);
+      return String.valueOf(MessageOpcode);
     }
 }
