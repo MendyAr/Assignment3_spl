@@ -1,10 +1,7 @@
-package bgu.spl.net.srv.CommandMessage;
+package bgu.spl.net.api.bidi.CommandMessage;
 
-import bgu.spl.net.srv.Message;
+import bgu.spl.net.api.bidi.Message;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -24,17 +21,26 @@ public class REGISTER extends Message {
 
     public REGISTER(short op,List<Byte> bytes) {
        super(op);
+        Username = "";
+        Password = "";
+        Birthday = "";
         int i=0;
-        while (bytes.get(i)!=0){
-            Username=Username+bytes.get(i);
+        while (bytes.get(i)!=0) {
+            char c = (char) bytes.get(i).shortValue();
+            Username = Username + c;
+            i++;
+        }
+        i++;
+        while (bytes.get(i)!=0) {
+            char c = (char) bytes.get(i).shortValue();
+            Password = Password + c;
+            i++;
         }
         i++;
         while (bytes.get(i)!=0){
-            Password=Password+bytes.get(i);
-        }
-        i++;
-        while (bytes.get(i)!=0){
-            Birthday=Birthday+bytes.get(i);
+            char c = (char) bytes.get(i).shortValue();
+            Birthday=Birthday + c;
+            i++;
         }
     }
 

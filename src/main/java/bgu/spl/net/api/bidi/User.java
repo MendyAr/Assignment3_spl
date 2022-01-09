@@ -1,11 +1,11 @@
-package bgu.spl.net.srv;
+package bgu.spl.net.api.bidi;
 
-import bgu.spl.net.srv.CommandMessage.*;
-import sun.security.validator.ValidatorException;
+import bgu.spl.net.api.bidi.CommandMessage.NOTIFICATION;
+import bgu.spl.net.api.bidi.CommandMessage.POST;
+import bgu.spl.net.api.bidi.CommandMessage.REGISTER;;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.regex.Pattern;
 import java.time.Year;
 
 public class User {
@@ -22,7 +22,7 @@ public class User {
     private List<String> Blocked;//the users the current user is blocked
     private int connectionId; //need to initialize connectionId
 
-    public User(REGISTER message,int HandlerConnectionId) {
+    public User(REGISTER message, int HandlerConnectionId) {
         if (isValidDate(message.getBirthday()))
             throw new IllegalArgumentException();
         userName=message.getUsername();
@@ -39,7 +39,8 @@ public class User {
         connectionId=HandlerConnectionId;
     }
     private boolean isValidDate(String birthday){
-        return birthday.matches("^(((0[1-9]|[12]\\d|3[01])\\-(0[13578]|1[02])\\-((19|[2-9]\\d)\\d{2}))|((0[1-9]|[12]\\d|30)\\-(0[13456789]|1[012])\\-((19|[2-9]\\d)\\d{2}))|((0[1-9]|1\\d|2[0-8])\\-02\\-((19|[2-9]\\d)\\d{2}))|(29\\-02\\-((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|(([1][26]|[2468][048]|[3579][26])00))))$");
+        return birthday.matches("([0-3]\\d-[0-1]\\d-\\d{4})");
+        //return birthday.matches("^(((0|[12]\\d|3[01])\\-(0[13578]|1[02])\\-((19|[2-9]\\d)\\d{2}))|((0[1-9]|[12]\\d|30)\\-(0[13456789]|1[012])\\-((19|[2-9]\\d)\\d{2}))|((0[1-9]|1\\d|2[0-8])\\-02\\-((19|[2-9]\\d)\\d{2}))|(29\\-02\\-((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|(([1][26]|[2468][048]|[3579][26])00))))$");
     }
 
     public boolean isLogged() { return isLogged; }

@@ -1,4 +1,4 @@
-package bgu.spl.net.srv;
+package bgu.spl.net.api.bidi;
 
 import java.util.List;
 
@@ -27,4 +27,5 @@ public class Message {
     public String getMessage(){
         return String.valueOf(opcode);
     }
+
 }

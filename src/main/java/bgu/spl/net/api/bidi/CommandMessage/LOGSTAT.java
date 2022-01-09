@@ -1,6 +1,6 @@
-package bgu.spl.net.srv.CommandMessage;
+package bgu.spl.net.api.bidi.CommandMessage;
 
-import bgu.spl.net.srv.Message;
+import bgu.spl.net.api.bidi.Message;
 
 public class LOGSTAT extends Message {
     public LOGSTAT(short opcode){

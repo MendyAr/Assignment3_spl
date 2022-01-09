@@ -1,7 +1,9 @@
 package bgu.spl.net.srv;
 
 import bgu.spl.net.api.MessageEncoderDecoder;
-import bgu.spl.net.api.MessagingProtocol;
+import bgu.spl.net.api.bidi.BidiMessagingProtocol;
+import bgu.spl.net.api.bidi.ConnectionsImp;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -15,15 +17,15 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     private BufferedInputStream in;
     private BufferedOutputStream out;
     private volatile boolean connected = true;
-    private int ConnectionId;
+    private final int ConnectionId;
 
-    public BlockingConnectionHandler(Socket sock, MessageEncoderDecoder<T> reader, BidiMessagingProtocol<T> protocol,int connectionId) {
+    public BlockingConnectionHandler(Socket sock, MessageEncoderDecoder<T> reader, BidiMessagingProtocol<T> protocol, int connectionId, ConnectionsImp<T> connections) {
         this.sock = sock;
         this.encdec = reader;
         this.protocol = protocol;
-        ConnectionId=connectionId;
-        protocol.start(connectionId,new ConnectionsImp(connectionId));
-
+        ConnectionId = connectionId;
+        protocol.start(connectionId, connections);
+        connections.register(connectionId, this);
     }
 
     @Override
@@ -38,7 +40,6 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
                 T nextMessage = encdec.decodeNextByte((byte) read);
                 if (nextMessage != null) {
                     protocol.process(nextMessage);
-
                 }
             }
 
@@ -52,5 +53,18 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
     public void close() throws IOException {
         connected = false;
         sock.close();
+    }
+
+    @Override
+    public synchronized void send(T msg) {
+        if (msg != null) {
+            try {
+                out.write(encdec.encode(msg));
+                out.flush();
+            }
+            catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
     }
 }

@@ -1,9 +1,10 @@
-package bgu.spl.net.srv;
+package bgu.spl.net.api.bidi;
 
-import bgu.spl.net.srv.CommandMessage.PM;
-import bgu.spl.net.srv.CommandMessage.POST;
+import bgu.spl.net.api.bidi.CommandMessage.PM;
+import bgu.spl.net.api.bidi.CommandMessage.POST;
 
-import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Database {
     private ConcurrentHashMap<String, User> users;
     private LinkedList<Message>postedMessage;
-    private String[] FilterWord;//need to initialize
+    private ArrayList<String> FilterWord;
 
     private static class DatabaseSingletonHolder {
         private static Database instance = new Database();
@@ -20,6 +21,9 @@ public class Database {
     private Database() {
         users = new ConcurrentHashMap<>();
         postedMessage=new LinkedList<>();
+        FilterWord = new ArrayList<>(Arrays.asList(
+                "spl", "goodvibes", "love"
+        ));
     }
 
     /**

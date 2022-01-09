@@ -1,13 +1,12 @@
-package bgu.spl.net.srv;
+package bgu.spl.net.api.bidi;
 
-import bgu.spl.net.srv.CommandMessage.*;
-
+import bgu.spl.net.api.bidi.CommandMessage.*;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDecoder<Message> {
-    byte[] opcode;
-    List<Byte> bytes=new LinkedList<>();
+    byte[] opcode = new byte[2];
+    List<Byte> bytes = new LinkedList<>();
     int lenOpcode;
 
     @Override
@@ -35,7 +34,8 @@ public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDeco
         }
         else {
             if (lenOpcode<2){
-                opcode[lenOpcode++]=nextByte;
+                opcode[lenOpcode]=nextByte;
+                lenOpcode++;
             }
             else
                 bytes.add(nextByte);

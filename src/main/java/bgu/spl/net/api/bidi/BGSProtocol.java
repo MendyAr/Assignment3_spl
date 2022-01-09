@@ -1,17 +1,14 @@
-package bgu.spl.net.srv;
+package bgu.spl.net.api.bidi;
 
-import bgu.spl.net.api.bidi.Connections;
-import bgu.spl.net.srv.CommandMessage.*;
-
+import bgu.spl.net.api.bidi.CommandMessage.*;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class BGSProtocol implements BidiMessagingProtocol<Message> {
     private boolean shouldTerminate = false;
-    User u;
-    Database database=Database.getInstance();
-    Connections connections;
-    int HandlerConnectionId;
+    private User u;
+    private final Database database=Database.getInstance();
+    private Connections<Message> connections;
+    private int HandlerConnectionId;
 
 
     @Override
@@ -56,10 +53,10 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                     connections.send(u.getConnectionId(), new ACK((short) 10, (short) 2));
                 }
                 break;
-            //3) REGISTER Messages
+            //3) LOGOUT Messages
             case (3):
                 if (u == null || !u.isLogged())
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 3));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 3));
                 else {
                     u.setLogged(false);
                     connections.send(u.getConnectionId(), new ACK((short) 10, (short) 3));
