@@ -7,30 +7,33 @@ import java.util.List;
 public class MessageEncoderDecoder implements bgu.spl.net.api.MessageEncoderDecoder<Message> {
     byte[] opcode = new byte[2];
     List<Byte> bytes = new LinkedList<>();
-    int lenOpcode;
+    int lenOpcode = 0;
 
 
     @Override
     public Message decodeNextByte(byte nextByte) {
         if (nextByte == ';') {
             short op = bytesToShort(opcode);
+            List<Byte> tmp = bytes;
+            bytes = new LinkedList<>();
+            lenOpcode = 0;
             switch (op) {
                 case 1:
-                    return new REGISTER(op, bytes);
+                    return new REGISTER(op, tmp);
                 case 2:
-                    return new LOGIN(op, bytes);
+                    return new LOGIN(op, tmp);
                 case 3:
                     return new LOGOUT(op);
                 case 4:
-                    return new FOLLOW(op, bytes);
+                    return new FOLLOW(op, tmp);
                 case 5:
-                    return new POST(op, bytes);
+                    return new POST(op, tmp);
                 case 6:
-                    return new PM(op, bytes);
+                    return new PM(op, tmp);
                 case 7:
                     return new LOGSTAT(op);
                 case 8:
-                    return new STAT(op, bytes);
+                    return new STAT(op, tmp);
             }
         } else {
             if (lenOpcode < 2) {

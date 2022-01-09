@@ -21,6 +21,7 @@ public class LOGIN extends Message {
         int i=0;
         while (bytes.get(i)!=0){
             Username=Username+bytes.get(i);
+            i++;
         }
         i++;
         while (bytes.get(i)!=0){
