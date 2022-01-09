@@ -34,7 +34,8 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                 break;
             //2) LOGIN Messages
             case (2):
-                if (u == null || !database.isUserRegistered(((LOGIN) message).getUsername()) || u.isLogged()
+                u= database.getUser(((LOGIN) message).getUsername());
+                if (u == null || !database.isUserRegistered(u.getUserName()) || u.isLogged()
                         || !((LOGIN) message).getPassword().equals(u.getPassword()) || ((LOGIN) message).getCaptcha() == 0)
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 2));
                 else {
