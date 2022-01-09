@@ -9,7 +9,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
     private final Database database=Database.getInstance();
     private Connections<Message> connections;
     private int HandlerConnectionId;
-
+    private String userName;
 
     @Override
     public void start(int connectionId, Connections<Message> connections) {
@@ -35,6 +35,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
             //2) LOGIN Messages
             case (2):
                 u= database.getUser(((LOGIN) message).getUsername());
+                userName=u.getUserName();
                 if (u == null || !database.isUserRegistered(u.getUserName()) || u.isLogged()
                         || !((LOGIN) message).getPassword().equals(u.getPassword()) || ((LOGIN) message).getCaptcha() == 0)
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 2));
@@ -51,6 +52,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                 break;
             //3) LOGOUT Messages
             case (3):
+                u= database.getUser(userName);
                 if (u == null || !u.isLogged())
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 3));
                 else {
@@ -60,6 +62,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                 break;
             //4) FOLLOW Messages
             case (4):
+                u= database.getUser(userName);
                 if (u == null || !u.isLogged())
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 4));
                 // follow-a user on the list must not already be on the
@@ -88,6 +91,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
             break;
             //5) POST Messages
             case (5):
+                u= database.getUser(userName);
                 if (u == null || !u.isLogged())
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 5));
                 else {
@@ -105,6 +109,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                 break;
             //6) PM Messages
             case (6):
+                u= database.getUser(userName);
                 if (u == null || !u.isLogged() || u.isBlocking(database.getUser(((PM) message).getUserName())))
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 6));
                 else if (!database.isUserRegistered(((PM) message).getUserName()))
@@ -119,6 +124,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                 break;
             //7) LOGSTAT Messages
             case (7):
+                u= database.getUser(userName);
                 if (u == null || !u.isLogged())
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 7));
                 else {
@@ -133,6 +139,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                 break;
             //8) STAT Messages
             case (8):
+                u= database.getUser(userName);
                 if (u == null || !u.isLogged())
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 8));
                 else {
@@ -148,6 +155,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                 break;
             //12) BLOCK Messages
             case (12):
+                u= database.getUser(userName);
                 if (u == null || !u.isLogged() || !database.isUserRegistered(((BLOCK) message).getUsername()))
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 12));
                 else {
