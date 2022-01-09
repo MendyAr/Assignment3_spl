@@ -30,18 +30,18 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                     try {
                         u = new User((REGISTER) message, HandlerConnectionId);
                     } catch (Exception e) {
-                        connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 1));//incorrect form of birthday
+                        connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 1));//incorrect form of birthday
                         break;
                     }
                     database.RegisterUser(u);
-                    connections.send(u.getConnectionId(), new ACK((short) 10, (short) 1));
+                    connections.send(HandlerConnectionId, new ACK((short) 10, (short) 1));
                 }
                 break;
             //2) LOGIN Messages
             case (2):
                 if (u == null || !database.isUserRegistered(((LOGIN) message).getUsername()) || u.isLogged()
                         || !((LOGIN) message).getPassword().equals(u.getPassword()) || ((LOGIN) message).getCaptcha() == 0)
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 2));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 2));
                 else {
                     u.setLogged(true);
                     if (u.hasUnSentNotification()) {
@@ -50,7 +50,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                             connections.send(u.getConnectionId(), notification);
 
                     }
-                    connections.send(u.getConnectionId(), new ACK((short) 10, (short) 2));
+                    connections.send(HandlerConnectionId, new ACK((short) 10, (short) 2));
                 }
                 break;
             //3) LOGOUT Messages
@@ -59,13 +59,13 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                     connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 3));
                 else {
                     u.setLogged(false);
-                    connections.send(u.getConnectionId(), new ACK((short) 10, (short) 3));
+                    connections.send(HandlerConnectionId, new ACK((short) 10, (short) 3));
                 }
                 break;
             //4) FOLLOW Messages
             case (4):
                 if (u == null || !u.isLogged())
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 4));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 4));
                 // follow-a user on the list must not already be on the
                 //following list of the logged in user
                 else if (((FOLLOW) message).getFollow() == 0) {
@@ -74,7 +74,7 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                         User userToFollowAfter = database.getUser(((FOLLOW) message).getUserName());
                         userToFollowAfter.addFollower(u.getUserName());
                     } catch (Exception e) {
-                        connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 4));
+                        connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 4));
                         break;
                     }
                 }
@@ -84,79 +84,79 @@ public class BGSProtocol implements BidiMessagingProtocol<Message> {
                         User userToUnFollow = database.getUser(((FOLLOW) message).getUserName());
                         userToUnFollow.removeFollower(u.getUserName());
                     } catch (Exception e) {
-                        connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 4));
+                        connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 4));
                         break;
                     }
                 }
-                connections.send(u.getConnectionId(), new ACK((short) 10, (short) 4, ((FOLLOW) message).getFollow(), ((FOLLOW) message).getUserName()));
+                connections.send(HandlerConnectionId, new ACK((short) 10, (short) 4, ((FOLLOW) message).getFollow(), ((FOLLOW) message).getUserName()));
             break;
             //5) POST Messages
             case (5):
                 if (u == null || !u.isLogged())
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 5));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 5));
                 else {
                     database.savePost((POST) message);
                     List<String> sendTo = u.sendMessage((POST) message);
                     for (String userName : sendTo) {
                         if (database.isUserRegistered(userName))
-                            connections.send(database.UserConnectionId(userName), new NOTIFICATION((short) 9, (byte) 1, u.getUserName(), ((POST) message).getContent()));
+                            connections.send(HandlerConnectionId, new NOTIFICATION((short) 9, (byte) 1, u.getUserName(), ((POST) message).getContent()));
                         else {
                             database.getUser(userName).addUnSentNotification(new NOTIFICATION((short) 9, (byte) 1, u.getUserName(), ((POST) message).getContent()));
                         }
                     }
-                    connections.send(u.getConnectionId(), new ACK((short) 10, (short) 5));
+                    connections.send(HandlerConnectionId, new ACK((short) 10, (short) 5));
                 }
                 break;
             //6) PM Messages
             case (6):
                 if (u == null || !u.isLogged() || u.isBlocking(database.getUser(((PM) message).getUserName())))
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 6));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 6));
                 else if (!database.isUserRegistered(((PM) message).getUserName()))
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 6, "@" + ((PM) message).getUserName() + " isn’t applicable for private messages"));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 6, "@" + ((PM) message).getUserName() + " isn’t applicable for private messages"));
                 else if (!u.isFollowAfter(database.getUser(((PM) message).getUserName())))
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 6));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 6));
                 else {
                     database.savePM((PM) message);
-                    connections.send(database.UserConnectionId(((PM) message).getUserName()), new NOTIFICATION((short) 9, (byte) 0, u.getUserName(), ((PM) message).getContent()));
-                    connections.send(u.getConnectionId(), new ACK((short) 10, (short) 6));
+                    connections.send(HandlerConnectionId, new NOTIFICATION((short) 9, (byte) 0, u.getUserName(), ((PM) message).getContent()));
+                    connections.send(HandlerConnectionId, new ACK((short) 10, (short) 6));
                 }
                 break;
             //7) LOGSTAT Messages
             case (7):
                 if (u == null || !u.isLogged())
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 7));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 7));
                 else {
                     List<User> LoggedUsers = database.getLoggedInUsers();
                     for (User user : LoggedUsers) {
                         if (!database.isUserRegistered(user.getUserName()))
-                            connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 7));
+                            connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 7));
                         if (!u.isBlocking(user) && !user.isBlocking(u))
-                            connections.send(u.getConnectionId(), new ACK((short) 10, (short) 7, user.Status()));
+                            connections.send(HandlerConnectionId, new ACK((short) 10, (short) 7, user.Status()));
                     }
                 }
                 break;
             //8) STAT Messages
             case (8):
                 if (u == null || !u.isLogged())
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 8));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 8));
                 else {
                     List<String> StatOfUsers = ((STAT) message).getListOfUserName();
                     for (String username : StatOfUsers) {
                         User user = database.getUser(username);
                         if (u.isBlocking(user) || user.isBlocking(u) || !database.isUserRegistered(username))
-                            connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 8));
+                            connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 8));
                         else
-                            connections.send(u.getConnectionId(), new ACK((short) 10, (short) 8, user.Status()));
+                            connections.send(HandlerConnectionId, new ACK((short) 10, (short) 8, user.Status()));
                     }
                 }
                 break;
             //12) BLOCK Messages
             case (12):
                 if (u == null || !u.isLogged() || !database.isUserRegistered(((BLOCK) message).getUsername()))
-                    connections.send(u.getConnectionId(), new ERROR((short) 11, (short) 12));
+                    connections.send(HandlerConnectionId, new ERROR((short) 11, (short) 12));
                 else {
                     u.Block(((BLOCK) message).getUsername());
-                    connections.send(u.getConnectionId(), new ACK((short) 10, (short) 12));
+                    connections.send(HandlerConnectionId, new ACK((short) 10, (short) 12));
                 }
 
         }
