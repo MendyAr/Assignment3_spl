@@ -21,17 +21,20 @@ public class PM extends Message {
         super(op);
         int i=0;
         while (bytes.get(i)!=0){
-            UserName=UserName+bytes.get(i);
+            char c = (char) bytes.get(i).shortValue();
+            UserName=UserName + c;
             i++;
         }
         i++;
         while (bytes.get(i)!=0){
-            Content=Content+bytes.get(i);
+            char c = (char) bytes.get(i).shortValue();
+            Content=Content + c;
             i++;
         }
         i++;
         while (bytes.get(i)!=0){
-            DateAndTime=DateAndTime+bytes.get(i);
+            char c = (char) bytes.get(i).shortValue();
+            DateAndTime=DateAndTime + c;
             i++;
         }
     }

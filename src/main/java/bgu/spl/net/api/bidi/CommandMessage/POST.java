@@ -14,8 +14,11 @@ public class POST extends Message {
 
     public POST(short op,List<Byte> bytes) {
         super(op);
-        for (int i=0;i<bytes.size()-1;i++)
-            Content=Content+bytes.get(i);
+        for (int i=0;i<bytes.size()-1;i++) {
+            char c = (char) bytes.get(i).shortValue();
+            Content = Content + c;
+        }
+
     }
 
     public void setContent(String content) {Content = content; }

@@ -20,12 +20,14 @@ public class LOGIN extends Message {
         super(op);
         int i=0;
         while (bytes.get(i)!=0){
-            Username=Username+bytes.get(i);
+            char c = (char) bytes.get(i).shortValue();
+            Username = Username + c;
             i++;
         }
         i++;
         while (bytes.get(i)!=0){
-            Password=Password+bytes.get(i);
+            char c = (char) bytes.get(i).shortValue();
+            Password=Password + c;
             i++;
         }
         i++;

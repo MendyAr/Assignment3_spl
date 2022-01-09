@@ -16,8 +16,10 @@ public class FOLLOW extends Message {
     public FOLLOW(short op,List<Byte> bytes) {
         super(op);
         Follow=bytes.get(0);
-        for (int i=1;i<bytes.size();i++)
-            UserName=UserName+bytes.get(i);
+        for (int i=1;i<bytes.size();i++) {
+            char c = (char) bytes.get(i).shortValue();
+            UserName = UserName + c;
+        }
     }
 
     public void setUserName(String userName) { UserName = userName; }
