@@ -21,8 +21,9 @@ public class ServerMain {
             ).serve();
         }
         else if (args[1].equals("Reactor")) {
+            int numOfThreads=Integer.decode(args[2]);
             Server.reactor(
-                    Runtime.getRuntime().availableProcessors(),
+                    numOfThreads,
                     port,
                     () -> new BGSProtocol(){},
                     () -> new MessageEncoderDecoder(){},
